@@ -1,21 +1,28 @@
-name: Build Madeira IPA PR14
+name: 构建Madeira IPA PR14
 on:
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: macos-latest
     steps:
-      - name: Checkout PR #14
+      - name: Checkout 外部仓库PR#14
         uses: actions/checkout@v6
         with:
           repository: willfaust/Madeira
           ref: refs/pull/14/head
-          submodules: recursive
-          fetch-depth: 0
-      - name: Run build‑ipa.sh
-        run: ./scripts/build‑ipa.sh
-      - name: Upload IPA artifact
-        uses: actions/upload‑artifact@v4
+          submodules: true
+
+      - name: 列出当前目录，调试看文件
+        run: ls -la
+
+      - name: 执行构建脚本
+        run: |
+          chmod +x ./scripts/build-ipa.sh
+          ./scripts/build-ipa.sh
+
+      - name: 上传IPA产物
+        uses: actions/upload-artifact@v4
         with:
           name: Madeira‑PR14‑IPA
-          path: dist/*.ipa
+          path: ./*.ipa
