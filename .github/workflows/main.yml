@@ -6,23 +6,30 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-      - name: Checkout 外部仓库PR#14
+      - name: 检出willfaust/Madeira PR#14
         uses: actions/checkout@v6
         with:
           repository: willfaust/Madeira
           ref: refs/pull/14/head
           submodules: true
 
-      - name: 列出当前目录，调试看文件
-        run: ls -la
+      - name: 安装编译依赖 flex + bison，覆盖系统旧版
+        run: |
+          brew update
+          brew install flex bison
+          echo "$(brew --prefix bison)/bin" >> $GITHUB_PATH
+          echo "$(brew --prefix flex)/bin" >> $GITHUB_PATH
 
-      - name: 执行构建脚本
+      - name: 查看目录结构，确认脚本存在
+        run: ls -R
+
+      - name: 执行IPA构建脚本
         run: |
           chmod +x ./scripts/build-ipa.sh
           ./scripts/build-ipa.sh
 
-      - name: 上传IPA产物
+      - name: 上传生成的IPA包
         uses: actions/upload-artifact@v4
         with:
-          name: Madeira‑PR14‑IPA
+          name: Madeira-PR14-IPA
           path: ./*.ipa
