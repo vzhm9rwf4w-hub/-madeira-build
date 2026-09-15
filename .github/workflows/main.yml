@@ -4,7 +4,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - name: 检出willfaust/Madeira PR#14
         uses: actions/checkout@v6
@@ -13,7 +13,7 @@ jobs:
           ref: refs/pull/14/head
           submodules: true
 
-      - name: 安装编译依赖 flex + bison，覆盖系统旧版
+      - name: 安装编译依赖 flex + bison
         run: |
           brew update
           brew install flex bison
